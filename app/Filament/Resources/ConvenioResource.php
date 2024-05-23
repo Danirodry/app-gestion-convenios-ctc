@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Filters\SelectFilter;
 
 
 class ConvenioResource extends Resource
@@ -201,13 +202,26 @@ class ConvenioResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id') 
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->label('ID')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nit') 
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->label('NIT')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('estudiantes.documento') 
+                Tables\Columns\TextColumn::make('empresas.nombre')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('estudiantes.documento')
+                    ->toggleable(isToggledHiddenByDefault: false) 
                     ->label('Documento')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('estudiantes.nombre')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('estado_convenio')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->badge()
                     ->color(fn (string $state): string => match ($state){
                         'completado' => 'success',
@@ -220,16 +234,23 @@ class ConvenioResource extends Resource
                     ->wrap()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('fecha_inicio')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->date()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_fin')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->date()
                     ->searchable()
                     
                 
             ])
             ->filters([
-                //
+                SelectFilter::make('estado_convenio') //integrar busqueta por filtro en los estados (use)
+                    ->options([
+                        'completado' => 'Completado',
+                        'por_completar' => 'Por Completar',
+                        'cancelado' => 'Cancelado',
+                    ])
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

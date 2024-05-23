@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Filters\SelectFilter;
 
 class EmpresaResource extends Resource
 {
@@ -91,23 +92,31 @@ class EmpresaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nit')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->label('NIT')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('n_convenio')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->label('N° Convenio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nombre')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tel_cel')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->label('Tel / Cel')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('direccion')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('correo')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('representante_legal')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estado_empresa')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->label('Estado de de la Empresa')
                     ->badge()
                     ->color(fn (string $state): string => match ($state){
@@ -121,14 +130,21 @@ class EmpresaResource extends Resource
                     ->wrap()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('inicio_convenio')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->date()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fin_convenio')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->date()
                     ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('estado_empresa') //integrar busqueta por filtro en los estados (use)
+                    ->options([
+                        'completado' => 'Completado',
+                        'por_completar' => 'Por Completar',
+                        'cancelado' => 'Cancelado',
+                    ])
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
