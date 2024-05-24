@@ -43,7 +43,7 @@ class EstudianteResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('documento')
                             // ->prefix('C.C')
-                            ->helperText('Ingresar Solamente Numeros, sin (.,)')
+                            ->helperText('Ingresar solamente Numeros, sin (.,)')
                             ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
                             ->numeric()
                             ->minLength(8)

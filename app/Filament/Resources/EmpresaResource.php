@@ -43,6 +43,7 @@ class EmpresaResource extends Resource
                 ->columns(3)
                 ->schema([
                     Forms\Components\TextInput::make('nit')
+                        ->unique(ignoreRecord: true)
                         ->label('NIT')
                         ->required(),
                     Forms\Components\TextInput::make('n_convenio')

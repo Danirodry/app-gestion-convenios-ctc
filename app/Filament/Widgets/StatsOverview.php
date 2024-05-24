@@ -17,7 +17,7 @@ class StatsOverview extends BaseWidget
             ->chart([2, 7, 10])
             ->color('success'),
             Stat::make('Total de Empresas', Empresa::count())
-            ->chart([7, 2, 10, 3, 15, 4, 17])
+            ->chart([1, 2, 5, 6, 7, 8, 17])
             ->color('info'),
             Stat::make('Total de Estudiantes', Estudiante::count())
             ->chart([7, 2, 10, 3, 15, 4, 17])
