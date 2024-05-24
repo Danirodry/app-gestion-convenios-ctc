@@ -22,6 +22,16 @@ class ProgramaResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-square-3-stack-3d'; //editar iconos
     protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
 
+    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    {
+        return static::getModel()::count();
+    }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        // Retorna el color que deseas asignar al badge de navegación
+        return 'gray'; // Por ejemplo, un badge azul con texto blanco
+    }
+
     public static function form(Form $form): Form
     {
         return $form

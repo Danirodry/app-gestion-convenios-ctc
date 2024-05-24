@@ -16,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class EmpresaResource extends Resource
 {
@@ -24,6 +25,15 @@ class EmpresaResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-building-office-2'; //editar iconos
     protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; //para agregar un menu desplegable
     protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
+
+    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    {
+        return static::getModel()::count();
+    }
+    public static function getNavigationBadgeColor(): ?string //agregar color al contador
+    {    
+        return 'info'; 
+    }
 
     public static function form(Form $form): Form
     {
@@ -155,6 +165,7 @@ class EmpresaResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
             ]);
     }

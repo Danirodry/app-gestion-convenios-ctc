@@ -17,6 +17,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
 use Filament\Support\Enums\FontWeight;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 
 
@@ -27,6 +28,11 @@ class EstudianteResource extends Resource
     protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; //para agregar un menu desplegable
     protected static ?string $navigationIcon = 'heroicon-s-users'; //editar iconos
     protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
+
+    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -158,6 +164,7 @@ class EstudianteResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
             ]);
     }

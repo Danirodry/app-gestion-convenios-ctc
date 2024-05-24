@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Filters\SelectFilter;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 
 class ConvenioResource extends Resource
@@ -26,6 +27,15 @@ class ConvenioResource extends Resource
     protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
     
 
+    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    {
+        return static::getModel()::count();     
+    }
+    public static function getNavigationBadgeColor(): ?string //agregar color al contador
+    {    
+        return 'success'; 
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -212,6 +222,7 @@ class ConvenioResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nombre')
                     ->toggleable(isToggledHiddenByDefault: false)
+                    ->label('Empresa')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estudiantes.documento')
                     ->toggleable(isToggledHiddenByDefault: false) 
@@ -219,6 +230,7 @@ class ConvenioResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estudiantes.nombre')
                     ->toggleable(isToggledHiddenByDefault: false)
+                    ->label('Estudiante')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estado_convenio')
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -261,6 +273,7 @@ class ConvenioResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
             ]);
     }
