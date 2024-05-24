@@ -30,6 +30,8 @@ class DashboardPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Red,
             ])
+            ->brandLogo(asset('images/logo-convenios-ctc.png'))//Poner logo en el panel
+            ->brandLogoHeight('3rem') //tamaño del logo
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

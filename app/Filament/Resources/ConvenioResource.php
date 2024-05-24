@@ -33,8 +33,13 @@ class ConvenioResource extends Resource
     }
     public static function getNavigationBadgeColor(): ?string //agregar color al contador
     {    
-        return 'success'; 
+        return 'success';  
     }
+    // public static function infolist(Infolist $infolist): Infolist //agregar color al contador
+    // {    
+    //     return $infolist; 
+    // }
+
     
     public static function form(Form $form): Form
     {
