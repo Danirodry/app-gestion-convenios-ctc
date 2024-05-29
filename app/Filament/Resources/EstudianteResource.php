@@ -18,6 +18,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
 use Filament\Support\Enums\FontWeight;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Guava\FilamentClusters\Forms\Cluster;
+use Filament\Forms\Components\Fieldset;
 
 
 
@@ -38,20 +40,37 @@ class EstudianteResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
-                    ->columns(3)
+                Fieldset::make('Datos del Estudiante')
                     ->schema([
-                        Forms\Components\TextInput::make('documento')
-                            // ->prefix('C.C')
-                            ->helperText('Ingresar solamente Numeros, sin (.,)')
-                            ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
-                            ->numeric()
-                            ->minLength(8)
-                            ->maxLength(10)
-                            ->placeholder('1234567890')
-                            ->label('Documento')
-                            ->required(),
+                        Cluster::make([
+                            Forms\Components\Select::make('tipo_documento')
+                                ->label('Tipo de Documento')
+                                ->placeholder('Tipo de Documento')
+                                ->options([
+                                    'CC' => 'CC - Cédula de Ciudadanía',
+                                    'TI' => 'TI - Tarjeta de Identidad',
+                                    'CE' => 'CE - Cédula Extranjera',
+                                    'PEP' => 'PEP - Permiso Especial de Permanencia ',
+                                    'PPT' => 'PPT - Permiso por Protección Temporal',
+                                    ])
+                                    ->suffixIcon('heroicon-m-identification')
+                                    ->required(),
+                            Forms\Components\TextInput::make('documento')
+                                // ->prefix('C.C')
+                                // ->helperText('Ingresar solamente Numeros, sin (.,)')
+                                ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
+                                ->numeric()
+                                ->maxLength(10)
+                                ->placeholder('1234567890')
+                                // ->label('Número de Documento')
+                                ->required(),
+                                    ])->label('Documento')
+                                    // ->columns(1)
+                                    // ->hint('Numero del Documento')
+                                    ->helperText('Ingresar solamente Numeros sin puntos ni comas'),
+                        
                         Forms\Components\TextInput::make('nombre')
+                            ->label('Nombre Completo')
                             ->maxLength(255)
                             ->required(),
                         Forms\Components\TextInput::make('correo')
@@ -65,6 +84,7 @@ class EstudianteResource extends Resource
                             ->maxLength(10)
                             ->required(),
                         Forms\Components\TextInput::make('direccion')
+                            ->label('Dirección')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Select::make('programas_id') //hacer la busqueda por seleccion (use)
@@ -72,10 +92,21 @@ class EstudianteResource extends Resource
                             ->required()
                             ->searchable()
                             ->preload(),
-                    ]),
-                    Section::make('Informacion Adicional')
-                        ->columns(3)
-                        ->schema([ 
+                    ])->columns(3),
+                // Section::make()
+                //     ->columns(2)
+                //     ->schema([
+                        
+                //     ]),
+                    Fieldset::make('Infomación Adicional')
+                        ->schema([
+                            Forms\Components\Select::make('tipo_estudiante')
+                                ->label('El Estudiante es:')
+                                ->options([
+                                    'interno' => 'Interno (CTC)',
+                                    'externo' => 'Externo (Otra institución)',
+                                    ])
+                                    ->required(),
                             Forms\Components\Select::make('estado_estudiante')
                                 ->label('Estado del Estudiante')
                                 ->options([
@@ -88,8 +119,8 @@ class EstudianteResource extends Resource
                                     ->autosize()
                                     ->columnSpan('full')
                                     ->maxLength(255),  
-                        ]),
-                   
+                    
+                        ])->columns(3),        
             ]);
     }
 
@@ -97,9 +128,13 @@ class EstudianteResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('tipo_documento')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->searchable()
+                    ->label('Tipo'),
                 Tables\Columns\TextColumn::make('documento')
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->weight(FontWeight::Bold)
+                    ->weight(FontWeight::Bold)    // use
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nombre')
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -114,6 +149,10 @@ class EstudianteResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->label('Tel / Cel')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('tipo_estudiante')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->searchable()
+                    ->label('Estudiante'),
                 Tables\Columns\TextColumn::make('direccion')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
@@ -151,12 +190,21 @@ class EstudianteResource extends Resource
                         'completado' => 'Completado',
                         'por_completar' => 'Por Completar',
                         'cancelado' => 'Cancelado',
-                    ])
+                    ]),
+                SelectFilter::make('tipo_estudiante')
+                    ->options([
+                        'interno' => 'Interno (CTC)',
+                        'externo' => 'Externo (Otra institución)',
+                        ])
+                          
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()
+                    ->color('warning'),
+                    Tables\Actions\DeleteAction::make()
+                    ->color('danger'),
                 ])->tooltip('Acciones') ->color('indigo')->icon('heroicon-s-adjustments-horizontal'),
 
                 

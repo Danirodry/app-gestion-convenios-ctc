@@ -18,6 +18,8 @@ class Estudiante extends Model
         'estado_estudiante',
         'direccion',
         'observaciones',
+        'tipo_documento',
+        'tipo_estudiante',
         
         
     ];

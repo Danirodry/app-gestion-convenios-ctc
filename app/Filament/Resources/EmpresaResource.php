@@ -15,8 +15,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Filament\Forms\Components\Fieldset;
 
 class EmpresaResource extends Resource
 {
@@ -39,8 +41,7 @@ class EmpresaResource extends Resource
     {
         return $form
         ->schema([
-            Section::make()
-                ->columns(3)
+            Fieldset::make('Datos de la Empresa')
                 ->schema([
                     Forms\Components\TextInput::make('nit')
                         ->unique(ignoreRecord: true)
@@ -60,11 +61,10 @@ class EmpresaResource extends Resource
                         ->required(),
                     Forms\Components\TextInput::make('representante_legal')
                         ->required(),
-                ]),
-                
-            Section::make('Informacion Adicional')
-                    
-                ->schema([ 
+                ])->columns(3),
+
+            Fieldset::make('Informacion Adicional')
+                ->schema([
                     Forms\Components\Select::make('estado_empresa')
                         ->label('Estado de la Empresa')
                         ->options([
@@ -77,24 +77,22 @@ class EmpresaResource extends Resource
                         ->autosize()
                         ->columnSpan('full')
                         ->required(), 
-                        ])
-                        ->columns(3),
-               
-        
-                            
-            Section::make('Duración del Convenio')
-                    
-                ->schema([       
+                        
+                        ])->columns(3),    
+ 
+            Fieldset::make('Duración del Convenio')
+                ->schema([
                     Forms\Components\DatePicker::make('inicio_convenio')
-                         ->placeholder('may 22, 2024')    
+                        ->placeholder('may 22, 2024')    
                         ->native(false)
                         ->required(),
                     Forms\Components\DatePicker::make('fin_convenio')
                         ->placeholder('jul 23, 2024')    
                         ->native(false)
-                         ->required(),
-                         ])
-                         ->columns(3),
+                         ->required(),      
+                ])->columns(3),    
+      
+                    
                 ]);
     }
 
@@ -104,6 +102,7 @@ class EmpresaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nit')
                     ->toggleable(isToggledHiddenByDefault: false)
+                    ->weight(FontWeight::Bold)
                     ->label('NIT')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('n_convenio')
@@ -160,7 +159,10 @@ class EmpresaResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()
+                    ->color('warning'),
+                    Tables\Actions\DeleteAction::make()
+                    ->color('danger'),
                 ])->tooltip('Acciones') ->color('indigo')->icon('heroicon-s-adjustments-horizontal'),
             ])
             ->bulkActions([

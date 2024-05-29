@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
@@ -223,6 +224,7 @@ class ConvenioResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nit') 
                     ->toggleable(isToggledHiddenByDefault: false)
+                    ->weight(FontWeight::Bold)
                     ->label('NIT')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('empresas.nombre')
@@ -231,6 +233,7 @@ class ConvenioResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estudiantes.documento')
                     ->toggleable(isToggledHiddenByDefault: false) 
+                    ->weight(FontWeight::Bold)
                     ->label('Documento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('estudiantes.nombre')
@@ -272,7 +275,10 @@ class ConvenioResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()
+                    ->color('warning'),
+                    Tables\Actions\DeleteAction::make()
+                    ->color('danger'),
                 ])->tooltip('Acciones') ->color('indigo')->icon('heroicon-s-adjustments-horizontal'),
             ])
             ->bulkActions([
