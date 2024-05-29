@@ -20,6 +20,12 @@ use Filament\Support\Enums\FontWeight;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Guava\FilamentClusters\Forms\Cluster;
 use Filament\Forms\Components\Fieldset;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
+use Filament\Infolists\Components\Grid;
+
+
 
 
 
@@ -64,7 +70,7 @@ class EstudianteResource extends Resource
                                 ->placeholder('1234567890')
                                 // ->label('Número de Documento')
                                 ->required(),
-                                    ])->label('Documento')
+                                    ])->label('Documento de identidad')
                                     // ->columns(1)
                                     // ->hint('Numero del Documento')
                                     ->helperText('Ingresar solamente Numeros sin puntos ni comas'),
@@ -92,7 +98,7 @@ class EstudianteResource extends Resource
                             ->required()
                             ->searchable()
                             ->preload(),
-                    ])->columns(3),
+                    ])->columns(2),
                 // Section::make()
                 //     ->columns(2)
                 //     ->schema([
@@ -200,7 +206,8 @@ class EstudianteResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\ViewAction::make()
+                    ->label('Ver'),
                     Tables\Actions\EditAction::make()
                     ->color('warning'),
                     Tables\Actions\DeleteAction::make()
@@ -216,6 +223,64 @@ class EstudianteResource extends Resource
                 ]),
             ]);
     }
+
+    public static function infolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->schema([
+            Components\Section::make()->schema([
+                components\Grid::make(4)->schema([
+                    Components\TextEntry::make('tipo_documento')
+                    ->label('Tipo de Documento')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('documento')
+                    ->label('Numero de Documento')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('nombre')
+                    ->label('Nombre')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('correo')
+                    ->label('Correo electronico')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('tel_cel')
+                    ->label('Telefono o Celular')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('tipo_estudiante')
+                    ->label('Tipo de Estudiante')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('direccion')
+                    ->label('Dirección de residencia')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('programas.nombre')
+                    ->label('Nombre del programa academico')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('estado_estudiante')
+                    ->label('Estado del Estudiante')
+                    ->badge()                                             //Los vuelve formato etiqueta
+                    ->color(fn (string $state): string => match ($state){ //Da color
+                        'completado' => 'success',
+                        'por_completar' => 'warning',
+                        'cancelado' => 'danger',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state){ //Reemplaza los nombres
+                        'completado' => 'Completado',
+                        'por_completar' => 'Por Completar',
+                        'cancelado' => 'Cancelado',
+                    }),
+                    Components\TextEntry::make('created_at')
+                        ->weight(FontWeight::Bold)
+                        ->label('Fecha de creación')
+                        ->date()
+                    
+                ]),
+                Components\TextEntry::make('observaciones')
+                ->weight(FontWeight::Bold),
+                
+            ])
+            
+                // ->columnSpanFull(),
+        ]);
+}
 
     public static function getRelations(): array
     {

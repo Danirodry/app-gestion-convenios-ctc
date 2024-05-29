@@ -17,6 +17,12 @@ use Filament\Forms\Components\Textarea;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Guava\FilamentClusters\Forms\Cluster;
+use Filament\Forms\Components\Fieldset;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
+use Filament\Infolists\Components\Grid;
 
 
 class ConvenioResource extends Resource
@@ -83,40 +89,40 @@ class ConvenioResource extends Resource
                                         ->required(),
                                 ]),
                                 
-                            Section::make('Informacion Adicional')
-                                    
-                                ->schema([ 
-                                    Forms\Components\Select::make('estado_empresa')
-                                        ->label('Estado de la Empresa')
-                                        ->options([
-                                            'completado' => 'Completado',
-                                            'por_completar' => 'Por Completar',
-                                            'cancelado' => 'Cancelado',
-                                        ])
-                                        ->required(),
-                                    Forms\Components\Textarea::make('observaciones')
-                                        ->autosize()
-                                        ->columnSpan('full')
-                                        ->required(), 
-                                        ])
-                                        ->columns(3),
-                               
-                        
-                                            
-                            Section::make('Duración del Convenio')
-                                    
-                                ->schema([       
-                                    Forms\Components\DatePicker::make('inicio_convenio')
-                                         ->placeholder('may 22, 2024')    
-                                        ->native(false)
-                                        ->required(),
-                                    Forms\Components\DatePicker::make('fin_convenio')
-                                        ->placeholder('jul 23, 2024')    
-                                        ->native(false)
-                                         ->required(),
-                                         ])
-                                         ->columns(3),
-                            ]), 
+                                Section::make('Informacion Adicional')
+                                        
+                                    ->schema([ 
+                                        Forms\Components\Select::make('estado_empresa')
+                                            ->label('Estado de la Empresa')
+                                            ->options([
+                                                'completado' => 'Completado',
+                                                'por_completar' => 'Por Completar',
+                                                'cancelado' => 'Cancelado',
+                                            ])
+                                            ->required(),
+                                        Forms\Components\Textarea::make('observaciones')
+                                            ->autosize()
+                                            ->columnSpan('full')
+                                            ->required(), 
+                                            ])
+                                            ->columns(3),
+                                
+                            
+                                                
+                                Section::make('Duración del Convenio')
+                                        
+                                    ->schema([       
+                                        Forms\Components\DatePicker::make('inicio_convenio')
+                                            ->placeholder('may 22, 2024')    
+                                            ->native(false)
+                                            ->required(),
+                                        Forms\Components\DatePicker::make('fin_convenio')
+                                            ->placeholder('jul 23, 2024')    
+                                            ->native(false)
+                                            ->required(),
+                                            ])
+                                            ->columns(3),
+                                ]), 
 
 
                     Forms\Components\Select::make('estudiantes_id')
@@ -127,58 +133,87 @@ class ConvenioResource extends Resource
                         ->preload()
                             ->createOptionForm([
 
-                                Section::make('Crear datos del Estudiante')
-                                    ->columns(3)
+                                Fieldset::make('Datos del Estudiante')
                                     ->schema([
-                                        Forms\Components\TextInput::make('documento')
-                                            // ->prefix('C.C')
-                                            ->helperText('Ingresar Solamente Numeros, sin (.,)')
-                                            ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
-                                            ->numeric()
-                                            ->minLength(8)
-                                            ->maxLength(10)
-                                            ->placeholder('1234567890')
-                                            ->label('Documento')
-                                            ->required(),
-                                        Forms\Components\TextInput::make('nombre')
-                                            ->maxLength(255)
-                                            ->required(),
-                                        Forms\Components\TextInput::make('correo')
-                                            ->email()
-                                            ->required()
-                                            ->maxLength(255),
-                                        Forms\Components\TextInput::make('tel_cel')
-                                            ->label('Tel / Cel')
-                                            ->tel()
-                                            ->minLength(10)
-                                            ->maxLength(10)
-                                            ->required(),
-                                        Forms\Components\TextInput::make('direccion')
-                                            ->required()
-                                            ->maxLength(255),
-                                        Forms\Components\Select::make('programas_id') //hacer la busqueda por seleccion (use)
-                                            ->relationship('programas','nombre')//Se hace la relacion
-                                            ->required()
-                                            ->searchable()
-                                            ->preload(),
-                                ]),
-                                Section::make('Informacion Adicional')
-                                    ->columns(3)
-                                    ->schema([ 
-                                        Forms\Components\Select::make('estado_estudiante')
-                                            ->label('Estado del Estudiante')
-                                            ->options([
-                                                'completado' => 'Completado',
-                                                'por_completar' => 'Por Completar',
-                                                'cancelado' => 'Cancelado',
-                                                ])
+                                        Cluster::make([
+                                            Forms\Components\Select::make('tipo_documento')
+                                                ->label('Tipo de Documento')
+                                                ->placeholder('Tipo de Documento')
+                                                ->options([
+                                                    'CC' => 'CC - Cédula de Ciudadanía',
+                                                    'TI' => 'TI - Tarjeta de Identidad',
+                                                    'CE' => 'CE - Cédula Extranjera',
+                                                    'PEP' => 'PEP - Permiso Especial de Permanencia ',
+                                                    'PPT' => 'PPT - Permiso por Protección Temporal',
+                                                    ])
+                                                    ->suffixIcon('heroicon-m-identification')
+                                                    ->required(),
+                                            Forms\Components\TextInput::make('documento')
+                                                // ->prefix('C.C')
+                                                // ->helperText('Ingresar solamente Numeros, sin (.,)')
+                                                ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
+                                                ->numeric()
+                                                ->maxLength(10)
+                                                ->placeholder('1234567890')
+                                                // ->label('Número de Documento')
                                                 ->required(),
-                                        Forms\Components\Textarea::make('observaciones')
-                                                ->autosize()
-                                                ->columnSpan('full')
-                                                ->maxLength(255),  
-                                    ]),
-
+                                                    ])->label('Documento de identidad')
+                                                    // ->columns(1)
+                                                    // ->hint('Numero del Documento')
+                                                    ->helperText('Ingresar solamente Numeros sin puntos ni comas'),
+                                        
+                                            Forms\Components\TextInput::make('nombre')
+                                                ->label('Nombre Completo')
+                                                ->maxLength(255)
+                                                ->required(),
+                                            Forms\Components\TextInput::make('correo')
+                                                ->email()
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('tel_cel')
+                                                ->label('Tel / Cel')
+                                                ->tel()
+                                                ->minLength(10)
+                                                ->maxLength(10)
+                                                ->required(),
+                                            Forms\Components\TextInput::make('direccion')
+                                                ->label('Dirección')
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\Select::make('programas_id') //hacer la busqueda por seleccion (use)
+                                                ->relationship('programas','nombre')//Se hace la relacion
+                                                ->required()
+                                                ->searchable()
+                                                ->preload(),
+                                        ])->columns(2),
+                                    // Section::make()
+                                    //     ->columns(2)
+                                    //     ->schema([
+                                            
+                                    //     ]),
+                                    Fieldset::make('Infomación Adicional')
+                                        ->schema([
+                                            Forms\Components\Select::make('tipo_estudiante')
+                                                ->label('El Estudiante es:')
+                                                ->options([
+                                                    'interno' => 'Interno (CTC)',
+                                                    'externo' => 'Externo (Otra institución)',
+                                                    ])
+                                                    ->required(),
+                                            Forms\Components\Select::make('estado_estudiante')
+                                                ->label('Estado del Estudiante')
+                                                ->options([
+                                                    'completado' => 'Completado',
+                                                    'por_completar' => 'Por Completar',
+                                                    'cancelado' => 'Cancelado',
+                                                    ])
+                                                    ->required(),
+                                            Forms\Components\Textarea::make('observaciones')
+                                                    ->autosize()
+                                                    ->columnSpan('full')
+                                                    ->maxLength(255),  
+                                    
+                                        ])->columns(3), 
                                         ]),        
                                             
                                     ]),
@@ -274,7 +309,8 @@ class ConvenioResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\ViewAction::make()
+                    ->label('Ver'),
                     Tables\Actions\EditAction::make()
                     ->color('warning'),
                     Tables\Actions\DeleteAction::make()
@@ -289,6 +325,52 @@ class ConvenioResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->schema([
+            Components\Section::make()->schema([
+                components\Grid::make(4)->schema([
+                    Components\TextEntry::make('empresas.nit')
+                    ->label('NIT de la Empresa')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('empresas.nombre')
+                    ->label('Nombre de la Empresa')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('estudiantes.documento')
+                    ->label('Numero del Documento')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('estudiantes.nombre')
+                    ->label('Nombre del estudiante')
+                    ->weight(FontWeight::Bold),
+    
+                    Components\TextEntry::make('estado_convenio')
+                    ->label('Estado de la Convenio')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state){
+                        'completado' => 'success',
+                        'por_completar' => 'warning',
+                        'cancelado' => 'gray',
+                    })
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('fecha_inicio')
+                    ->label('Inicio del convenio')
+                    ->date()
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('fecha_fin')
+                    ->label('Fin del convenio')
+                    ->date()
+                    ->weight(FontWeight::Bold),
+                    
+                ]),
+                Components\TextEntry::make('observaciones')
+                ->weight(FontWeight::Bold),
+                
+            ])
+            
+                // ->columnSpanFull(),
+        ]);
+}
     public static function getRelations(): array
     {
         return [

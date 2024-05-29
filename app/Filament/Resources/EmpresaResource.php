@@ -19,6 +19,10 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Forms\Components\Fieldset;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
+use Filament\Infolists\Components\Grid;
 
 class EmpresaResource extends Resource
 {
@@ -158,7 +162,8 @@ class EmpresaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\ViewAction::make()
+                    ->label('Ver'),
                     Tables\Actions\EditAction::make()
                     ->color('warning'),
                     Tables\Actions\DeleteAction::make()
@@ -172,6 +177,61 @@ class EmpresaResource extends Resource
                 ]),
             ]);
     }
+
+    public static function infolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->schema([
+            Components\Section::make()->schema([
+                components\Grid::make(4)->schema([
+                    Components\TextEntry::make('nit')
+                    ->label('NIT de la Empresa')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('n_convenio')
+                    ->label('Numero del Convenio')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('nombre')
+                    ->label('Nombre de la Empresa')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('tel_cel')
+                    ->label('Telefono o Celular')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('direccion')
+                    ->label('Dirección')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('correo')
+                    ->label('Correo electronico')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('representante_legal')
+                    ->label('Representante legal')
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('estado_empresa')
+                    ->label('Estado de la Empresa')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state){
+                        'completado' => 'success',
+                        'por_completar' => 'warning',
+                        'cancelado' => 'gray',
+                    })
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('inicio_convenio')
+                    ->label('Inicio del convenio con la empresa')
+                    ->date()
+                    ->weight(FontWeight::Bold),
+                    Components\TextEntry::make('fin_convenio')
+                    ->label('Fin del convenio con la empresa')
+                    ->date()
+                    ->weight(FontWeight::Bold),
+                    
+                ]),
+                Components\TextEntry::make('observaciones')
+                ->weight(FontWeight::Bold),
+                
+            ])
+            
+                // ->columnSpanFull(),
+        ]);
+}
 
     public static function getRelations(): array
     {
