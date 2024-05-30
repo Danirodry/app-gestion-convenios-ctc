@@ -20,7 +20,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/dashboard/login');
 });
-
-// Route::get('/dashboard/login', function () {
-//     return view('dashboard');
-// })->name('dashboard');
