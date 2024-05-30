@@ -60,11 +60,12 @@ class ConvenioResource extends Resource
                 ->schema([
 
                     Forms\Components\Select::make('empresas_id')
+                        ->label('NIT de la Empresa')
                         ->relationship('empresas','nit')//Se hace la relacion
                         ->required()
-                        ->label('NIT de la Empresa')
                         ->searchable()
                         ->preload()
+                        
                             //Crer nueva Empresa en una ventana modal (sin salir de crear convenios)
                             ->createOptionForm([
                                 Section::make('Crear datos de la empresa')
