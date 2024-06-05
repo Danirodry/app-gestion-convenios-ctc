@@ -28,15 +28,16 @@ class EmpresaResource extends Resource
 {
     protected static ?string $model = Empresa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-building-office-2'; //editar iconos
-    protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; //para agregar un menu desplegable
-    protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
+    protected static ?string $navigationIcon = 'heroicon-s-building-office-2'; 
+    protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; 
+    protected static ?int $navigationSort = 1; 
 
-    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    public static function getNavigationBadge(): ?string  
     {
         return static::getModel()::count();
     }
-    public static function getNavigationBadgeColor(): ?string //agregar color al contador
+
+    public static function getNavigationBadgeColor(): ?string
     {    
         return 'info'; 
     }
@@ -152,14 +153,18 @@ class EmpresaResource extends Resource
                     ->date()
                     ->searchable(),
             ])
+
+            //integrar busqueta por filtro en los estados (use)
+
             ->filters([
-                SelectFilter::make('estado_empresa') //integrar busqueta por filtro en los estados (use)
+                SelectFilter::make('estado_empresa') 
                     ->options([
                         'completado' => 'Completado',
                         'por_completar' => 'Por Completar',
                         'cancelado' => 'Cancelado',
                     ])
             ])
+
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()
@@ -170,6 +175,7 @@ class EmpresaResource extends Resource
                     ->color('danger'),
                 ])->tooltip('Acciones') ->color('indigo')->icon('heroicon-s-adjustments-horizontal'),
             ])
+            
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -229,7 +235,6 @@ class EmpresaResource extends Resource
                 
             ])
             
-                // ->columnSpanFull(),
         ]);
 }
 

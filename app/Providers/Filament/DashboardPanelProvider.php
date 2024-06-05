@@ -31,8 +31,9 @@ class DashboardPanelProvider extends PanelProvider
                 'primary' => Color::Red,
             ])
             ->brandLogo(asset('images/logo-convenios-ctc.png'))//Poner logo en el panel
-            ->darkModeBrandLogo(asset('images/logo-dark-convenios-ctc.png'))
+            ->darkModeBrandLogo(asset('images/logo-dark-convenios-ctc.png'))//Logo en modo oscuro
             ->brandLogoHeight('3rem') //tamaño del logo
+            ->favicon(asset('images/logo-ctc.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

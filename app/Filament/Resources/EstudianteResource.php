@@ -25,19 +25,15 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
 use Filament\Infolists\Components\Grid;
 
-
-
-
-
 class EstudianteResource extends Resource
 {
     protected static ?string $model = Estudiante::class;
 
-    protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; //para agregar un menu desplegable
-    protected static ?string $navigationIcon = 'heroicon-s-users'; //editar iconos
-    protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
+    protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; 
+    protected static ?string $navigationIcon = 'heroicon-s-users'; 
+    protected static ?int $navigationSort = 1; 
 
-    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    public static function getNavigationBadge(): ?string 
     {
         return static::getModel()::count();
     }
@@ -63,15 +59,12 @@ class EstudianteResource extends Resource
                                     ->required(),
                             Forms\Components\TextInput::make('documento')
                                 // ->prefix('C.C')
-                                // ->helperText('Ingresar solamente Numeros, sin (.,)')
                                 ->unique(ignoreRecord: true) //que sea unico al crear y cuando se edite se ignore 
                                 ->numeric()
                                 ->maxLength(10)
                                 ->placeholder('1234567890')
-                                // ->label('Número de Documento')
                                 ->required(),
                                     ])->label('Documento de identidad')
-                                    // ->columns(1)
                                     // ->hint('Numero del Documento')
                                     ->helperText('Ingresar solamente Numeros sin puntos ni comas'),
                         
@@ -99,11 +92,7 @@ class EstudianteResource extends Resource
                             ->searchable()
                             ->preload(),
                     ])->columns(2),
-                // Section::make()
-                //     ->columns(2)
-                //     ->schema([
-                        
-                //     ]),
+         
                     Fieldset::make('Infomación Adicional')
                         ->schema([
                             Forms\Components\Select::make('tipo_estudiante')
@@ -190,8 +179,11 @@ class EstudianteResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
+            //integrar busqueta por filtro en los estados (use)
+
             ->filters([
-                SelectFilter::make('estado_estudiante') //integrar busqueta por filtro en los estados (use)
+                SelectFilter::make('estado_estudiante') 
                     ->options([
                         'completado' => 'Completado',
                         'por_completar' => 'Por Completar',
@@ -256,13 +248,13 @@ class EstudianteResource extends Resource
                     ->weight(FontWeight::Bold),
                     Components\TextEntry::make('estado_estudiante')
                     ->label('Estado del Estudiante')
-                    ->badge()                                             //Los vuelve formato etiqueta
-                    ->color(fn (string $state): string => match ($state){ //Da color
+                    ->badge()                                             
+                    ->color(fn (string $state): string => match ($state){ 
                         'completado' => 'success',
                         'por_completar' => 'warning',
                         'cancelado' => 'danger',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state){ //Reemplaza los nombres
+                    ->formatStateUsing(fn (string $state): string => match ($state){
                         'completado' => 'Completado',
                         'por_completar' => 'Por Completar',
                         'cancelado' => 'Cancelado',
@@ -278,7 +270,6 @@ class EstudianteResource extends Resource
                 
             ])
             
-                // ->columnSpanFull(),
         ]);
 }
 

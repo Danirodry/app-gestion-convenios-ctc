@@ -24,30 +24,52 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
 use Filament\Infolists\Components\Grid;
 
+/**
+ * Class ConvenioResource
+ *
+ * Gestiona la configuración de la interfaz y la lógica para la entidad Convenio.
+ */
 
 class ConvenioResource extends Resource
 {
     protected static ?string $model = Convenio::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
-    protected static ?string $navigationGroup = 'Gestion Practica Empresarial'; //para agregar un menu desplegable
-    protected static ?int $navigationSort = 1; // organizar el menu de arriba hacia abajo
+    protected static ?string $navigationGroup = 'Gestion Practica Empresarial';
+    protected static ?int $navigationSort = 1; 
     
+       /**
+     * Obtiene el badge de navegación con el conteo de convenios.
+     *
+     * @return string|null
+     */
 
-    public static function getNavigationBadge(): ?string  //Esto pondra un contador en el menu de Convenios dira la cantidad
+    public static function getNavigationBadge(): ?string 
     {
         return static::getModel()::count();     
     }
-    public static function getNavigationBadgeColor(): ?string //agregar color al contador
+
+     /**
+     * Obtiene el color del badge de navegación.
+     *
+     * @return string|null
+     */
+
+    public static function getNavigationBadgeColor(): ?string
     {    
         return 'success';  
     }
-    // public static function infolist(Infolist $infolist): Infolist //agregar color al contador
-    // {    
-    //     return $infolist; 
-    // }
-
     
+      /**
+     * Configura el formulario para la entidad Convenio.
+     *
+     * Este método construye el formulario para el recurso Convenio utilizando la biblioteca Filament,
+     * especificando secciones y componentes para gestionar la relación entre la empresa y el estudiante.
+     * 
+     * @param Form $form
+     * @return Form
+     */
+
     public static function form(Form $form): Form
     {
         return $form
@@ -187,11 +209,7 @@ class ConvenioResource extends Resource
                                                 ->searchable()
                                                 ->preload(),
                                         ])->columns(2),
-                                    // Section::make()
-                                    //     ->columns(2)
-                                    //     ->schema([
-                                            
-                                    //     ]),
+                                    
                                     Fieldset::make('Infomación Adicional')
                                         ->schema([
                                             Forms\Components\Select::make('tipo_estudiante')
@@ -249,6 +267,13 @@ class ConvenioResource extends Resource
             ]);
 
     }
+
+      /**
+     * Configura la tabla para la entidad Convenio.
+     *
+     * @param Table $table
+     * @return Table
+     */
 
     public static function table(Table $table): Table
     {
@@ -325,6 +350,13 @@ class ConvenioResource extends Resource
                 ]),
             ]);
     }
+
+    /**
+     * Configura la lista de información para la entidad Convenio.
+     *
+     * @param Infolist $infolist
+     * @return Infolist
+     */
 
     public static function infolist(Infolist $infolist): Infolist
 {
